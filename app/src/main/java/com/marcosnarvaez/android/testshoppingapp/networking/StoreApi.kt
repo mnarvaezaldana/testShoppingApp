@@ -7,10 +7,10 @@ import retrofit2.http.Path
 
 interface StoreApi {
 
-    @GET
-    suspend fun products(): Response<ProductsListResponseSchema>
+    @GET("products/")
+    suspend fun products(): Response<List<Product>>
 
-    @GET("/{productId}")
+    @GET("products/{productId}")
     suspend fun questionDetails(@Path("productId") productId: String?): Response<Product>
 
 }
