@@ -11,6 +11,6 @@ interface StoreApi {
     suspend fun products(): Response<List<Product>>
 
     @GET("products/{productId}")
-    suspend fun questionDetails(@Path("productId") productId: String?): Response<Product>
+    suspend fun productsDetails(@Path("productId") productId: String?): Response<Product>
 
 }
