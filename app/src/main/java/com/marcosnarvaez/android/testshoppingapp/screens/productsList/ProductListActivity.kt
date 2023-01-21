@@ -1,9 +1,10 @@
-package com.marcosnarvaez.android.testshoppingapp
+package com.marcosnarvaez.android.testshoppingapp.screens.productsList
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.marcosnarvaez.android.testshoppingapp.R
 
 class ProductListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
