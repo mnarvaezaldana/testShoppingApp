@@ -5,44 +5,31 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
+import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
 import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductDetailsActivity.Companion.startProductDetailsActivity
 import kotlinx.coroutines.*
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private lateinit var storeApi: StoreApi
 
     private var isDataLoaded = false
 
     private lateinit var viewMvc: ProductsListViewMvc
 
+    private lateinit var fetchProductsUseCase: FetchProductsUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewMvc = ProductsListViewMvc(LayoutInflater.from(this), null)
-
+        fetchProductsUseCase = FetchProductsUseCase()
         setContentView(viewMvc.rootView)
 
-        val okHttpClient = OkHttpClient.Builder()
-        okHttpClient.connectTimeout(30, TimeUnit.SECONDS)
-        okHttpClient.readTimeout(30, TimeUnit.SECONDS)
-        okHttpClient.writeTimeout(30, TimeUnit.SECONDS)
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient.build())
-            .build()
-        storeApi = retrofit.create(StoreApi::class.java)
     }
 
     override fun onStart() {
@@ -63,18 +50,17 @@ class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
         coroutineScope.launch {
             viewMvc.showProgressIndication()
             try {
-                val response = storeApi.products()
-                if (response.isSuccessful && response.body() != null) {
-                    viewMvc.bindData(response.body()!!)
-                    isDataLoaded = true
-                } else {
-                    onFetchFailed()
+                val result = fetchProductsUseCase.fetchProducts()
+                when (result) {
+                    is FetchProductsUseCase.Result.Success -> {
+                        viewMvc.bindData(result.products)
+                        isDataLoaded = true
+                    }
+                    is FetchProductsUseCase.Result.Failure -> {
+                        onFetchFailed()
+                    }
                 }
-            } catch (t: Throwable) {
-                if (t !is CancellationException) {
-                    onFetchFailed()
-                }
-            }finally {
+            } finally {
                 viewMvc.hideProgressIndication()
             }
         }

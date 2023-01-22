@@ -6,44 +6,32 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import com.marcosnarvaez.android.testshoppingapp.R
-import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
+import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
 import kotlinx.coroutines.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 const val EXTRA_PRODUCT_ID = "productId"
 
 class ProductDetailsActivity : AppCompatActivity() {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private lateinit var mvc: ProductsDetailsViewMvc
-    private lateinit var storeApi: StoreApi
+    private lateinit var viewMvc: ProductsDetailsViewMvc
+    private lateinit var fetchProductDetailUseCase: FetchProductDetailUseCase
 
     private var productId: Int = 0
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
+        viewMvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
+        fetchProductDetailUseCase = FetchProductDetailUseCase()
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)
-        setContentView(mvc.rootView)
-
-
-
-
-        // init retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        storeApi = retrofit.create(StoreApi::class.java)
+        setContentView(viewMvc.rootView)
     }
 
     override fun onStart() {
         super.onStart()
-        fetchQuestionDetails()
+        fetchQuestionDetails(productId)
     }
 
     override fun onStop() {
@@ -51,23 +39,21 @@ class ProductDetailsActivity : AppCompatActivity() {
         coroutineScope.coroutineContext.cancelChildren()
     }
 
-    private fun fetchQuestionDetails() {
+    private fun fetchQuestionDetails(productId: Int) {
         coroutineScope.launch {
-            mvc.showProgressIndication()
+            viewMvc.showProgressIndication()
             try {
-                val response = storeApi.productsDetails(productId)
-                if (response.isSuccessful && response.body() != null) {
-                    val productBody = response.body()!!
-                    mvc.onBindData(productBody.toString())
-                } else {
-                    onFetchFailed()
-                }
-            } catch (t: Throwable) {
-                if (t !is CancellationException) {
-                    onFetchFailed()
+                val result = fetchProductDetailUseCase.fetchProductsDetails(productId)
+                when (result) {
+                    is FetchProductDetailUseCase.Result.Success -> {
+                        viewMvc.bindData(result.description)
+                    }
+                    is FetchProductDetailUseCase.Result.Failure -> {
+                        onFetchFailed()
+                    }
                 }
             } finally {
-                mvc.hideProgressIndication()
+                viewMvc.hideProgressIndication()
             }
         }
     }

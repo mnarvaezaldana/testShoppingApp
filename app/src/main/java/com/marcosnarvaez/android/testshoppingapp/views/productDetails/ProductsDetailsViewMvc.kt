@@ -36,7 +36,7 @@ class ProductsDetailsViewMvc(
 
 
 
-    fun onBindData(description: String) {
+    fun bindData(description: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             productDescriptionTV.text = Html.fromHtml(description, Html.FROM_HTML_MODE_LEGACY)
         } else {
