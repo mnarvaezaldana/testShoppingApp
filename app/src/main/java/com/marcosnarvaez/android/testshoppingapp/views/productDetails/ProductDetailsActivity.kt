@@ -1,6 +1,5 @@
 package com.marcosnarvaez.android.testshoppingapp.views.productDetails
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +24,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewMvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
-        fetchProductDetailUseCase = FetchProductDetailUseCase((application as MyApplication).storeApi)
+        fetchProductDetailUseCase = (application as MyApplication).fetchProductDetailUseCase
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)
         setContentView(viewMvc.rootView)

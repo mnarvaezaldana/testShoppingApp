@@ -2,6 +2,8 @@ package com.marcosnarvaez.android.testshoppingapp
 
 import android.app.Application
 import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
+import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
+import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,6 +25,9 @@ class MyApplication: Application() {
         .client(okHttpClient())
         .build()
 
-    val storeApi: StoreApi = retrofit.create(StoreApi::class.java)
+    private val storeApi: StoreApi = retrofit.create(StoreApi::class.java)
 
+    val fetchProductsUseCase get() = FetchProductsUseCase(storeApi)
+
+    val fetchProductDetailUseCase get() = FetchProductDetailUseCase(storeApi)
 }

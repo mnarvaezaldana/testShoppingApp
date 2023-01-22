@@ -10,8 +10,6 @@ import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
-import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
-import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductDetailsActivity.Companion.startProductDetailsActivity
 import kotlinx.coroutines.*
 
 class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
@@ -33,7 +31,7 @@ class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
         super.onCreate(savedInstanceState)
 
         viewMvc = ProductsListViewMvc(LayoutInflater.from(this), null)
-        fetchProductsUseCase = FetchProductsUseCase((application as MyApplication).storeApi)
+        (application as MyApplication).fetchProductsUseCase
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         screensNavigator = ScreensNavigator(this)
         setContentView(viewMvc.rootView)
