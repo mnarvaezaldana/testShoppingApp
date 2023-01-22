@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
+import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
+import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
 import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductDetailsActivity.Companion.startProductDetailsActivity
 import kotlinx.coroutines.*
@@ -22,11 +24,17 @@ class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
 
     private lateinit var fetchProductsUseCase: FetchProductsUseCase
 
+    private lateinit var dialogsNavigator: DialogsNavigator
+
+    private lateinit var screensNavigator: ScreensNavigator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewMvc = ProductsListViewMvc(LayoutInflater.from(this), null)
         fetchProductsUseCase = FetchProductsUseCase()
+        dialogsNavigator = DialogsNavigator(supportFragmentManager)
+        screensNavigator = ScreensNavigator(this)
         setContentView(viewMvc.rootView)
 
 
@@ -67,9 +75,7 @@ class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
     }
 
     private fun onFetchFailed() {
-        supportFragmentManager.beginTransaction()
-            .add(ServerErrorDialogFragment.newInstance(), null)
-            .commitAllowingStateLoss()
+        dialogsNavigator.showServerErrorDialog()
     }
 
     companion object {
@@ -84,7 +90,7 @@ class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
     }
 
     override fun onProductClicked(productClicked: Product) {
-        startProductDetailsActivity(this, productClicked.id)
+        screensNavigator.toProductDetails(productClicked.id)
     }
 
 }

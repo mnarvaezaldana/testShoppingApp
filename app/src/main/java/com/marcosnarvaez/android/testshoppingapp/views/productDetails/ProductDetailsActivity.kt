@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
-import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
+import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import kotlinx.coroutines.*
 
 const val EXTRA_PRODUCT_ID = "productId"
@@ -18,13 +18,14 @@ class ProductDetailsActivity : AppCompatActivity() {
     private lateinit var viewMvc: ProductsDetailsViewMvc
     private lateinit var fetchProductDetailUseCase: FetchProductDetailUseCase
 
+    private lateinit var dialogsNavigator: DialogsNavigator
     private var productId: Int = 0
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewMvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
         fetchProductDetailUseCase = FetchProductDetailUseCase()
+        dialogsNavigator = DialogsNavigator(supportFragmentManager)
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)
         setContentView(viewMvc.rootView)
     }
@@ -59,9 +60,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     }
 
     private fun onFetchFailed() {
-        supportFragmentManager.beginTransaction()
-            .add(ServerErrorDialogFragment.newInstance(), null)
-            .commitAllowingStateLoss()
+        dialogsNavigator.showServerErrorDialog()
     }
 
     companion object {
