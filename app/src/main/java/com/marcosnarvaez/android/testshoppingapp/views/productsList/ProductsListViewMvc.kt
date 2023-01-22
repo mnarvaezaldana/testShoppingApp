@@ -27,8 +27,6 @@ class ProductsListViewMvc(
     private var productsAdapter: ProductsAdapter
 
     init {
-
-
         swipeRefresh = findViewById(R.id.productsSR)
         swipeRefresh.setOnRefreshListener {
             for (listener in listeners) {
