@@ -25,6 +25,7 @@ class ProductDetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewMvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
+        viewMvc = compositionRoot.viewMvcFactory.newProductDetailsViewMvc(null)
         fetchProductDetailUseCase = compositionRoot.fetchProductDetailUseCase
         dialogsNavigator = compositionRoot.dialogsNavigator
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)

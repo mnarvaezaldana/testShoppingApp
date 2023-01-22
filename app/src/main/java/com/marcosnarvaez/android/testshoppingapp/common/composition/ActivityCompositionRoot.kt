@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
+import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.ViewMvcFactory
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 
 class ActivityCompositionRoot(
@@ -17,6 +18,8 @@ class ActivityCompositionRoot(
     }
 
     private val layoutInflater get() = LayoutInflater.from(activity)
+
+    val viewMvcFactory get() = ViewMvcFactory(layoutInflater)
 
     private val fragmentManager get() = activity.supportFragmentManager
 
