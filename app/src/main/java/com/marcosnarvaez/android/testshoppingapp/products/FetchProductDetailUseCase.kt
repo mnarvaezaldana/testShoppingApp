@@ -9,17 +9,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class FetchProductDetailUseCase {
 
+    sealed class Result {
+        class Success(val description: String): Result()
+        object Failure: Result()
+    }
+
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://fakestoreapi.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private var storeApi = retrofit.create(StoreApi::class.java)
-
-    sealed class Result {
-        class Success(val description: String): Result()
-        object Failure: Result()
-    }
 
     suspend fun fetchProductsDetails(productId: Int): Result {
         return withContext(Dispatchers.IO) {
