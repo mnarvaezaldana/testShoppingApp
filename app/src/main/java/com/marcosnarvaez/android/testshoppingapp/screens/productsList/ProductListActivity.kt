@@ -15,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
 import com.marcosnarvaez.android.testshoppingapp.products.Product
+import com.marcosnarvaez.android.testshoppingapp.screens.productDetails.ProductDetailsActivity
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -44,7 +45,7 @@ class ProductListActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.productsRV)
         recyclerView.layoutManager = LinearLayoutManager(this)
         productsAdapter = ProductsAdapter{ productClicked ->
-            Log.e("message", productClicked.title)
+            ProductDetailsActivity.startProductDetailsActivity(this, productClicked.id)
         }
         recyclerView.adapter = productsAdapter
 
