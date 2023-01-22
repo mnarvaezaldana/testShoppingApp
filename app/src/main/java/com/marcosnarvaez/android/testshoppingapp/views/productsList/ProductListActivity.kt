@@ -5,49 +5,32 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
-import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductDetailsActivity
+import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductDetailsActivity.Companion.startProductDetailsActivity
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class ProductListActivity : AppCompatActivity() {
+class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private lateinit var swipeRefresh: SwipeRefreshLayout
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var productsAdapter: ProductsAdapter
     private lateinit var storeApi: StoreApi
 
     private var isDataLoaded = false
 
+    private lateinit var viewMvc: ProductsListViewMvc
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_list)
 
-        swipeRefresh = findViewById(R.id.productsSR)
-        swipeRefresh.setOnRefreshListener {
-            fetchProducts()
-        }
+        viewMvc = ProductsListViewMvc(LayoutInflater.from(this), null)
 
-        recyclerView = findViewById(R.id.productsRV)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        productsAdapter = ProductsAdapter{ productClicked ->
-            ProductDetailsActivity.startProductDetailsActivity(this, productClicked.id)
-        }
-        recyclerView.adapter = productsAdapter
+        setContentView(viewMvc.rootView)
 
         val okHttpClient = OkHttpClient.Builder()
         okHttpClient.connectTimeout(30, TimeUnit.SECONDS)
@@ -64,18 +47,25 @@ class ProductListActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        viewMvc.registerListener(this)
         if (!isDataLoaded) {
             fetchProducts()
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        coroutineScope.coroutineContext.cancelChildren()
+        viewMvc.unregisterListener(this)
+    }
+
     private fun fetchProducts() {
         coroutineScope.launch {
-            showProgressIndication()
+            viewMvc.showProgressIndication()
             try {
                 val response = storeApi.products()
                 if (response.isSuccessful && response.body() != null) {
-                    productsAdapter.bindData(response.body()!!)
+                    viewMvc.bindData(response.body()!!)
                     isDataLoaded = true
                 } else {
                     onFetchFailed()
@@ -85,7 +75,7 @@ class ProductListActivity : AppCompatActivity() {
                     onFetchFailed()
                 }
             }finally {
-                hideProgressIndication()
+                viewMvc.hideProgressIndication()
             }
         }
     }
@@ -96,16 +86,6 @@ class ProductListActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
-    private fun showProgressIndication() {
-        swipeRefresh.isRefreshing = true
-    }
-
-    private fun hideProgressIndication() {
-        if (swipeRefresh.isRefreshing) {
-            swipeRefresh.isRefreshing = false
-        }
-    }
-
     companion object {
         fun startProductListActivity(context: Context) {
             val intent = Intent(context, ProductListActivity::class.java)
@@ -113,37 +93,12 @@ class ProductListActivity : AppCompatActivity() {
         }
     }
 
-    class ProductsAdapter(
-        private val onProductClickListener: (Product) -> Unit
-    ) : RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
-
-        private var productsList: List<Product> = java.util.ArrayList(0)
-
-        inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val title: TextView = view.findViewById(R.id.txt_title)
-        }
-
-        fun bindData(products: List<Product>) {
-            productsList = ArrayList(products)
-            notifyDataSetChanged()
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-            val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_product_list_item, parent, false)
-            return ProductViewHolder(itemView)
-        }
-
-        override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-            holder.title.text = productsList[position].title
-            holder.itemView.setOnClickListener {
-                onProductClickListener.invoke(productsList[position])
-            }
-        }
-
-        override fun getItemCount(): Int {
-            return productsList.size
-        }
-
+    override fun onRefreshClicked() {
+        fetchProducts()
     }
+
+    override fun onProductClicked(productClicked: Product) {
+        startProductDetailsActivity(this, productClicked.id)
+    }
+
 }
