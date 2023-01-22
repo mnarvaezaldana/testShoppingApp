@@ -3,12 +3,9 @@ package com.marcosnarvaez.android.testshoppingapp.views.productDetails
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Html
-import android.widget.TextView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import android.view.LayoutInflater
 import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
@@ -21,11 +18,7 @@ const val EXTRA_PRODUCT_ID = "productId"
 class ProductDetailsActivity : AppCompatActivity() {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
-
-    private lateinit var swipeRefresh: SwipeRefreshLayout
-    private lateinit var productDescriptionTV: TextView
-
+    private lateinit var mvc: ProductsDetailsViewMvc
     private lateinit var storeApi: StoreApi
 
     private var productId: Int = 0
@@ -33,14 +26,12 @@ class ProductDetailsActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_details)
-
+        mvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)
+        setContentView(mvc.rootView)
 
-        productDescriptionTV = findViewById(R.id.descriptionTV)
 
-        swipeRefresh = findViewById(R.id.swipeRefresh)
-        swipeRefresh.isEnabled = false
+
 
         // init retrofit
         val retrofit = Retrofit.Builder()
@@ -62,17 +53,12 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     private fun fetchQuestionDetails() {
         coroutineScope.launch {
-            showProgressIndication()
+            mvc.showProgressIndication()
             try {
                 val response = storeApi.productsDetails(productId)
                 if (response.isSuccessful && response.body() != null) {
-                    val questionBody = response.body()!!
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        productDescriptionTV.text = Html.fromHtml(questionBody.toString(), Html.FROM_HTML_MODE_LEGACY)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        productDescriptionTV.text = Html.fromHtml(questionBody.toString())
-                    }
+                    val productBody = response.body()!!
+                    mvc.onBindData(productBody.toString())
                 } else {
                     onFetchFailed()
                 }
@@ -81,25 +67,15 @@ class ProductDetailsActivity : AppCompatActivity() {
                     onFetchFailed()
                 }
             } finally {
-                hideProgressIndication()
+                mvc.hideProgressIndication()
             }
-
         }
     }
-
 
     private fun onFetchFailed() {
         supportFragmentManager.beginTransaction()
             .add(ServerErrorDialogFragment.newInstance(), null)
             .commitAllowingStateLoss()
-    }
-
-    private fun showProgressIndication() {
-        swipeRefresh.isRefreshing = true
-    }
-
-    private fun hideProgressIndication() {
-        swipeRefresh.isRefreshing = false
     }
 
     companion object {
