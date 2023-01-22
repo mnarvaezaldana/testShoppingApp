@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import com.marcosnarvaez.android.testshoppingapp.MyApplication
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import kotlinx.coroutines.*
@@ -24,7 +25,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewMvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
-        fetchProductDetailUseCase = FetchProductDetailUseCase()
+        fetchProductDetailUseCase = FetchProductDetailUseCase((application as MyApplication).storeApi)
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)
         setContentView(viewMvc.rootView)

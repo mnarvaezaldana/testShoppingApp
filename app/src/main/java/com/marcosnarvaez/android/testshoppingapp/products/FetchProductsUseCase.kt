@@ -4,33 +4,13 @@ import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
-class FetchProductsUseCase {
+class FetchProductsUseCase(private val storeApi: StoreApi) {
 
     sealed class Result {
         class Success(val products: List<Product>): Result()
         object Failure: Result()
     }
-
-    private fun okHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
-    }
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://fakestoreapi.com/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(okHttpClient())
-        .build()
-
-    val storeApi = retrofit.create(StoreApi::class.java)
 
     suspend fun fetchProducts(): Result {
         return withContext(Dispatchers.IO) {

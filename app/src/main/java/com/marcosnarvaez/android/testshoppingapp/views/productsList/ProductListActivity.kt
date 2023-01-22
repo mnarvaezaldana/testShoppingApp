@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import com.marcosnarvaez.android.testshoppingapp.MyApplication
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
@@ -32,12 +33,10 @@ class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
         super.onCreate(savedInstanceState)
 
         viewMvc = ProductsListViewMvc(LayoutInflater.from(this), null)
-        fetchProductsUseCase = FetchProductsUseCase()
+        fetchProductsUseCase = FetchProductsUseCase((application as MyApplication).storeApi)
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         screensNavigator = ScreensNavigator(this)
         setContentView(viewMvc.rootView)
-
-
     }
 
     override fun onStart() {
