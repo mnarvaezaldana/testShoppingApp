@@ -1,14 +1,15 @@
-package com.marcosnarvaez.android.testshoppingapp.common.composition
+package com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection
 
+import android.app.Application
+import androidx.annotation.UiThread
 import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
-import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
-import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class AppCompositionRoot {
+@UiThread
+class AppCompositionRoot(val application: Application) {
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()

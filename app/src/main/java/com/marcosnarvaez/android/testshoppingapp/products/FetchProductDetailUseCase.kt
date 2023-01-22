@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 class FetchProductDetailUseCase(private val storeApi: StoreApi) {
 
     sealed class Result {
-        class Success(val description: String): Result()
+        data class Success(val description: String): Result()
         object Failure: Result()
     }
 

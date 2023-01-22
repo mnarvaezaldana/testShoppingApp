@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.marcosnarvaez.android.testshoppingapp.MyApplication
+import com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection.Service
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
 import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
+import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.ViewMvcFactory
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import kotlinx.coroutines.*
 
@@ -17,20 +19,18 @@ const val EXTRA_PRODUCT_ID = "productId"
 class ProductDetailsActivity : BaseActivity() {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    @field:Service private lateinit var fetchProductDetailUseCase: FetchProductDetailUseCase
+    @field:Service private lateinit var screensNavigator: ScreensNavigator
+    @field:Service private lateinit var dialogsNavigator: DialogsNavigator
+    @field:Service private lateinit var viewMvcFactory: ViewMvcFactory
     private lateinit var viewMvc: ProductsDetailsViewMvc
-    private lateinit var fetchProductDetailUseCase: FetchProductDetailUseCase
-    private lateinit var screensNavigator: ScreensNavigator
-    private lateinit var dialogsNavigator: DialogsNavigator
     private var productId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
         super.onCreate(savedInstanceState)
-        viewMvc = compositionRoot.viewMvcFactory.newProductDetailsViewMvc(null)
+        viewMvc = viewMvcFactory.newProductDetailsViewMvc(null)
         setContentView(viewMvc.rootView)
-
-        fetchProductDetailUseCase = compositionRoot.fetchProductDetailUseCase
-        dialogsNavigator = compositionRoot.dialogsNavigator
-        screensNavigator = compositionRoot.screensNavigator
 
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)
     }

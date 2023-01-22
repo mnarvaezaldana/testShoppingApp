@@ -1,7 +1,7 @@
 package com.marcosnarvaez.android.testshoppingapp
 
 import android.app.Application
-import com.marcosnarvaez.android.testshoppingapp.common.composition.AppCompositionRoot
+import com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection.AppCompositionRoot
 
 class MyApplication: Application() {
 
@@ -9,6 +9,6 @@ class MyApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appCompositionRoot = AppCompositionRoot()
+        appCompositionRoot = AppCompositionRoot(this)
     }
 }

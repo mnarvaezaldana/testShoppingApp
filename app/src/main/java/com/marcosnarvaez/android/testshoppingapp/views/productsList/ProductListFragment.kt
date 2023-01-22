@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection.Service
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
+import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.ViewMvcFactory
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import com.marcosnarvaez.android.testshoppingapp.views.fragments.BaseFragment
 import kotlinx.coroutines.*
@@ -17,16 +19,16 @@ class ProductListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
     private var isDataLoaded = false
 
+    @field:Service private lateinit var fetchProductsUseCase: FetchProductsUseCase
+    @field:Service private lateinit var dialogsNavigator: DialogsNavigator
+    @field:Service private lateinit var screensNavigator: ScreensNavigator
+    @field:Service private lateinit var viewMvcFactory: ViewMvcFactory
+
     private lateinit var viewMvc: ProductsListViewMvc
-    private lateinit var fetchProductsUseCase: FetchProductsUseCase
-    private lateinit var dialogsNavigator: DialogsNavigator
-    private lateinit var screensNavigator: ScreensNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
         super.onCreate(savedInstanceState)
-        fetchProductsUseCase = compositionRoot.fetchProductsUseCase
-        dialogsNavigator = compositionRoot.dialogsNavigator
-        screensNavigator = compositionRoot.screensNavigator
     }
 
     override fun onCreateView(
@@ -34,7 +36,7 @@ class ProductListFragment : BaseFragment(), ProductsListViewMvc.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewMvc = compositionRoot.viewMvcFactory.newProductsListViewMvc(container)
+        viewMvc = viewMvcFactory.newProductsListViewMvc(container)
         return viewMvc.rootView
     }
 
