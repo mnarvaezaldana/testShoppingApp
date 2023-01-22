@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import com.marcosnarvaez.android.testshoppingapp.MyApplication
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
 import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
+import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import kotlinx.coroutines.*
 
@@ -18,18 +19,20 @@ class ProductDetailsActivity : BaseActivity() {
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private lateinit var viewMvc: ProductsDetailsViewMvc
     private lateinit var fetchProductDetailUseCase: FetchProductDetailUseCase
-
+    private lateinit var screensNavigator: ScreensNavigator
     private lateinit var dialogsNavigator: DialogsNavigator
     private var productId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewMvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
         viewMvc = compositionRoot.viewMvcFactory.newProductDetailsViewMvc(null)
+        setContentView(viewMvc.rootView)
+
         fetchProductDetailUseCase = compositionRoot.fetchProductDetailUseCase
         dialogsNavigator = compositionRoot.dialogsNavigator
+        screensNavigator = compositionRoot.screensNavigator
+
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)
-        setContentView(viewMvc.rootView)
     }
 
     override fun onStart() {
