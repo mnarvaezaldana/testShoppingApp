@@ -8,11 +8,12 @@ import android.view.LayoutInflater
 import com.marcosnarvaez.android.testshoppingapp.MyApplication
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
+import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import kotlinx.coroutines.*
 
-class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
+class ProductListActivity : BaseActivity(), ProductsListViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -31,7 +32,7 @@ class ProductListActivity : AppCompatActivity(), ProductsListViewMvc.Listener {
         super.onCreate(savedInstanceState)
 
         viewMvc = ProductsListViewMvc(LayoutInflater.from(this), null)
-        (application as MyApplication).fetchProductsUseCase
+        fetchProductsUseCase = compositionRoot.fetchProductsUseCase
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         screensNavigator = ScreensNavigator(this)
         setContentView(viewMvc.rootView)
