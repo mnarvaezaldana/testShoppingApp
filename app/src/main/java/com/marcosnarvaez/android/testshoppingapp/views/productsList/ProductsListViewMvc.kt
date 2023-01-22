@@ -1,38 +1,33 @@
 package com.marcosnarvaez.android.testshoppingapp.views.productsList
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.IdRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.products.Product
+import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.BaseViewMvc
 
 class ProductsListViewMvc(
-    private val layoutInflater: LayoutInflater,
-    private val parent: ViewGroup?
-) {
+    layoutInflater: LayoutInflater,
+    parent: ViewGroup?
+): BaseViewMvc<ProductsListViewMvc.Listener>(
+    layoutInflater,
+    parent,
+    R.layout.activity_product_list) {
 
     interface Listener {
         fun onRefreshClicked()
         fun onProductClicked(productClicked: Product)
     }
 
-    private var swipeRefresh: SwipeRefreshLayout
     private var recyclerView: RecyclerView
     private var productsAdapter: ProductsAdapter
 
-    val rootView: View = layoutInflater.inflate(R.layout.activity_product_list, parent, false)
-
-    private val context: Context get() = rootView.context
-
-    private val listeners = HashSet<Listener>()
-
     init {
+
 
         swipeRefresh = findViewById(R.id.productsSR)
         swipeRefresh.setOnRefreshListener {
@@ -51,30 +46,9 @@ class ProductsListViewMvc(
         recyclerView.adapter = productsAdapter
     }
 
-    private fun <T: View?> findViewById(@IdRes id: Int): T {
-        return rootView.findViewById<T>(id)
-    }
-
-    fun showProgressIndication() {
-        swipeRefresh.isRefreshing = true
-    }
-
-    fun hideProgressIndication() {
-        if (swipeRefresh.isRefreshing) {
-            swipeRefresh.isRefreshing = false
-        }
-    }
 
     fun bindData(products: List<Product>) {
         productsAdapter.bindData(products)
-    }
-
-    fun registerListener(listener: Listener) {
-        listeners.add(listener)
-    }
-
-    fun unregisterListener(listener: Listener) {
-        listeners.remove(listener)
     }
 
     class ProductsAdapter(

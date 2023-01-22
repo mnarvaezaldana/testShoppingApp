@@ -3,41 +3,38 @@ package com.marcosnarvaez.android.testshoppingapp.views.productDetails
 import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.IdRes
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.marcosnarvaez.android.testshoppingapp.R
+import com.marcosnarvaez.android.testshoppingapp.products.Product
+import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.BaseViewMvc
 
 class ProductsDetailsViewMvc(
-    private val layoutInflater: LayoutInflater,
-    private val parent: ViewGroup?
-) {
+    layoutInflater: LayoutInflater,
+    parent: ViewGroup?
+): BaseViewMvc<ProductsDetailsViewMvc.Listener>(
+    layoutInflater,
+    parent,
+    R.layout.activity_product_details) {
 
-    val rootView: View = layoutInflater.inflate(R.layout.activity_product_details, parent, false)
+    interface Listener {
+        fun onRefreshClicked()
+        fun onProductClicked(productClicked: Product)
+    }
 
-    private var swipeRefresh: SwipeRefreshLayout
     private var productDescriptionTV: TextView
 
     init {
+
+        rootView = layoutInflater.inflate(R.layout.activity_product_details, parent, false)
+
         productDescriptionTV = findViewById(R.id.descriptionTV)
         swipeRefresh = findViewById(R.id.productSR)
 
         swipeRefresh.isEnabled = false
     }
 
-    private fun <T: View?> findViewById(@IdRes id: Int): T {
-        return rootView.findViewById<T>(id)
-    }
 
-    fun showProgressIndication() {
-        swipeRefresh.isRefreshing = true
-    }
-
-    fun hideProgressIndication() {
-        swipeRefresh.isRefreshing = false
-    }
 
     fun onBindData(description: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
