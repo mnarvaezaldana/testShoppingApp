@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="50dp"
-    tools:context=".screens.LogInActivity">
+    tools:context=".views.LogInActivity">
 
     <TextView
         android:id="@+id/tvTitle"

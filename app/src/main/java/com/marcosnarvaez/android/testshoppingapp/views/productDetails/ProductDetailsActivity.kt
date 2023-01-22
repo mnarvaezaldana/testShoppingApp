@@ -1,4 +1,4 @@
-package com.marcosnarvaez.android.testshoppingapp.screens.productDetails
+package com.marcosnarvaez.android.testshoppingapp.views.productDetails
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
+import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
 import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -89,7 +90,9 @@ class ProductDetailsActivity : AppCompatActivity() {
 
 
     private fun onFetchFailed() {
-        Log.e("message", "Error fetching product details")
+        supportFragmentManager.beginTransaction()
+            .add(ServerErrorDialogFragment.newInstance(), null)
+            .commitAllowingStateLoss()
     }
 
     private fun showProgressIndication() {

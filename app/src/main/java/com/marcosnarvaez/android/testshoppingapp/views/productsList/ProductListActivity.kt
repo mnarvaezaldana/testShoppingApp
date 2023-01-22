@@ -1,4 +1,4 @@
-package com.marcosnarvaez.android.testshoppingapp.screens.productsList
+package com.marcosnarvaez.android.testshoppingapp.views.productsList
 
 import android.content.Context
 import android.content.Intent
@@ -15,7 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
 import com.marcosnarvaez.android.testshoppingapp.products.Product
-import com.marcosnarvaez.android.testshoppingapp.screens.productDetails.ProductDetailsActivity
+import com.marcosnarvaez.android.testshoppingapp.views.dialogs.ServerErrorDialogFragment
+import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductDetailsActivity
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -91,7 +92,9 @@ class ProductListActivity : AppCompatActivity() {
     }
 
     private fun onFetchFailed() {
-        Log.e("message", "error fetching data")
+        supportFragmentManager.beginTransaction()
+            .add(ServerErrorDialogFragment.newInstance(), null)
+            .commitAllowingStateLoss()
     }
 
     private fun showProgressIndication() {
