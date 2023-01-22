@@ -26,7 +26,7 @@ class ProductDetailsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         viewMvc = ProductsDetailsViewMvc(LayoutInflater.from(this), null)
         fetchProductDetailUseCase = compositionRoot.fetchProductDetailUseCase
-        dialogsNavigator = DialogsNavigator(supportFragmentManager)
+        dialogsNavigator = compositionRoot.dialogsNavigator
         productId = intent.extras!!.getInt(EXTRA_PRODUCT_ID, 0)
         setContentView(viewMvc.rootView)
     }
@@ -67,6 +67,7 @@ class ProductDetailsActivity : BaseActivity() {
     companion object {
         fun startProductDetailsActivity(context: Context, productId: Int) {
             val intent = Intent(context, ProductDetailsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(EXTRA_PRODUCT_ID, productId)
             context.startActivity(intent)
         }

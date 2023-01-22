@@ -1,13 +1,12 @@
 package com.marcosnarvaez.android.testshoppingapp.views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.marcosnarvaez.android.testshoppingapp.R
+import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
-import com.marcosnarvaez.android.testshoppingapp.views.productsList.ProductListActivity
 
-class LogInActivity : AppCompatActivity() {
+class LogInActivity : BaseActivity() {
 
     private lateinit var screensNavigator: ScreensNavigator
 
@@ -15,7 +14,7 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        screensNavigator = ScreensNavigator(this)
+        screensNavigator = compositionRoot.screensNavigator
         findViewById<Button>(R.id.LoginBTN).setOnClickListener {
             screensNavigator.toProductsList()
         }

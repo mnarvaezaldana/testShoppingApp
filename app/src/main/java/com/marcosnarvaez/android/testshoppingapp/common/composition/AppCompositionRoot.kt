@@ -26,11 +26,7 @@ class AppCompositionRoot {
             .build()
     }
 
-    private val storeApi: StoreApi by lazy {
+    val storeApi: StoreApi by lazy {
         retrofit.create(StoreApi::class.java)
     }
-
-    val fetchProductsUseCase get() = FetchProductsUseCase(storeApi)
-
-    val fetchProductDetailUseCase get() = FetchProductDetailUseCase(storeApi)
 }

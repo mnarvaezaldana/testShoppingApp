@@ -33,8 +33,8 @@ class ProductListActivity : BaseActivity(), ProductsListViewMvc.Listener {
 
         viewMvc = ProductsListViewMvc(LayoutInflater.from(this), null)
         fetchProductsUseCase = compositionRoot.fetchProductsUseCase
-        dialogsNavigator = DialogsNavigator(supportFragmentManager)
-        screensNavigator = ScreensNavigator(this)
+        dialogsNavigator = compositionRoot.dialogsNavigator
+        screensNavigator = compositionRoot.screensNavigator
         setContentView(viewMvc.rootView)
     }
 
@@ -79,6 +79,7 @@ class ProductListActivity : BaseActivity(), ProductsListViewMvc.Listener {
     companion object {
         fun startProductListActivity(context: Context) {
             val intent = Intent(context, ProductListActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         }
     }
