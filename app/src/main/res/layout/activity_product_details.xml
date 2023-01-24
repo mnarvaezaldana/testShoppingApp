@@ -13,7 +13,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,7 +41,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:src="@drawable/ic_launcher_background"/>
+                    android:src="@drawable/logo"/>
 
                 <TextView
                     android:id="@+id/descriptionTV"
@@ -83,7 +84,6 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="20dp"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
@@ -91,9 +91,13 @@
                     android:id="@+id/addToCartBTN"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_margin="15dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="50dp"
                     android:gravity="center"
-                    android:text="@string/add_to_cart"/>
+                    android:text="@string/add_to_cart"
+                    android:textAllCaps="false"/>
 
             </LinearLayout>
 
