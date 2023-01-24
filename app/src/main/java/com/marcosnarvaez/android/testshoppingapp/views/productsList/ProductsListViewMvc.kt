@@ -3,6 +3,7 @@ package com.marcosnarvaez.android.testshoppingapp.views.productsList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.BaseViewMvc
+import com.marcosnarvaez.android.testshoppingapp.views.imageloader.ImageLoader
 
 class ProductsListViewMvc(
     layoutInflater: LayoutInflater,
+    private val imageLoader: ImageLoader,
     parent: ViewGroup?
 ): BaseViewMvc<ProductsListViewMvc.Listener>(
     layoutInflater,
@@ -38,7 +41,7 @@ class ProductsListViewMvc(
         recyclerView = findViewById(R.id.productsRV)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
-        productsAdapter = ProductsAdapter{ productClicked ->
+        productsAdapter = ProductsAdapter(imageLoader) { productClicked ->
             for (listener in listeners) {
                 listener.onProductClicked(productClicked)
             }
@@ -52,6 +55,7 @@ class ProductsListViewMvc(
     }
 
     class ProductsAdapter(
+        private val imageLoader: ImageLoader,
         private val onProductClickListener: (Product) -> Unit
     ) : RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
 
@@ -60,6 +64,7 @@ class ProductsListViewMvc(
         inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val title: TextView = view.findViewById(R.id.titleTV)
             val description: TextView = view.findViewById(R.id.descriptionTV)
+            val image: ImageView = view.findViewById(R.id.productIV)
         }
 
         fun bindData(products: List<Product>) {
@@ -74,6 +79,7 @@ class ProductsListViewMvc(
         }
 
         override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+            imageLoader.loadImage(productsList[position].image, holder.image)
             holder.title.text = productsList[position].title
             holder.description.text = productsList[position].description
             holder.itemView.setOnClickListener {
