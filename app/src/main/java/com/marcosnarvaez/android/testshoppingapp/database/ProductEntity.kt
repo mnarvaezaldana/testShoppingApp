@@ -12,17 +12,17 @@ import androidx.room.PrimaryKey
     var id: Int = 0,
 
     @ColumnInfo(name = "title")
-    var title: String? = null,
+    var title: String = "",
 
     @ColumnInfo(name = "price")
-    val price: String? = null,
+    val price: String = "",
 
     @ColumnInfo(name = "category")
-    val category: String? = null,
+    val category: String = "",
 
     @ColumnInfo(name = "description")
-    val description: String? = null,
+    val description: String = "",
 
     @ColumnInfo(name = "image")
-    val image: String? = null
+    val image: String = ""
 )

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
+    android:backgroundTint="@color/white"
     tools:context=".views.productsList.ProductListActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -18,8 +20,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/productsRV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">testShoppingApp</string>
     <string name="log_in">Log In</string>
+    <string name="log_out">Log Out</string>
     <string name="category_template">Category: %s</string>
     <string name="price_template">Price: $ %s</string>
+    <string name="cart">Cart</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="user">User</string>
     <string name="password">Password</string>

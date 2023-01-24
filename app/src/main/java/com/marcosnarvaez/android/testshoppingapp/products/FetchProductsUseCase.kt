@@ -38,8 +38,11 @@ class FetchProductsUseCase @Inject constructor(private val database: ProductsDat
             try {
                 val productDao = database.productDao()
                 val response = productDao.getAll()
-                val responsePar = listOf<Product>()
-                if (response.isNotEmpty()) {
+                val responsePar = arrayListOf<Product>()
+                response.forEach {
+                    responsePar.add(Product(it.id, it.title, it.price, it.category, it.description, it.image))
+                }
+                if (responsePar.isNotEmpty()) {
                     return@withContext Result.Success(responsePar)
                 } else {
                     return@withContext Result.Failure

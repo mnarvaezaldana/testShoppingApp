@@ -44,6 +44,7 @@ class AppModule(val application: Application) {
             application.applicationContext,
             ProductsDatabase::class.java,
             "products_cart")
+            .fallbackToDestructiveMigration()
             .build()
     }
 

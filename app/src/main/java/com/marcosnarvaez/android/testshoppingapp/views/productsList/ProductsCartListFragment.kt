@@ -1,6 +1,7 @@
 package com.marcosnarvaez.android.testshoppingapp.views.productsList
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ class ProductsCartListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injector.inject(this)
+        Log.e("message", "cart created")
         super.onCreate(savedInstanceState)
     }
 
@@ -58,7 +60,7 @@ class ProductsCartListFragment : BaseFragment(), ProductsListViewMvc.Listener {
         coroutineScope.launch {
             viewMvc.showProgressIndication()
             try {
-                val result = fetchProductsUseCase.fetchProducts()
+                val result = fetchProductsUseCase.getProductsCart()
                 when (result) {
                     is FetchProductsUseCase.Result.Success -> {
                         viewMvc.bindData(result.products)
