@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.marcosnarvaez.android.testshoppingapp.R
@@ -36,6 +37,7 @@ class ProductsListViewMvc(
 
         recyclerView = findViewById(R.id.productsRV)
         recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
         productsAdapter = ProductsAdapter{ productClicked ->
             for (listener in listeners) {
                 listener.onProductClicked(productClicked)
@@ -56,7 +58,8 @@ class ProductsListViewMvc(
         private var productsList: List<Product> = java.util.ArrayList(0)
 
         inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val title: TextView = view.findViewById(R.id.txt_title)
+            val title: TextView = view.findViewById(R.id.titleTV)
+            val description: TextView = view.findViewById(R.id.descriptionTV)
         }
 
         fun bindData(products: List<Product>) {
@@ -72,6 +75,7 @@ class ProductsListViewMvc(
 
         override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
             holder.title.text = productsList[position].title
+            holder.description.text = productsList[position].description
             holder.itemView.setOnClickListener {
                 onProductClickListener.invoke(productsList[position])
             }

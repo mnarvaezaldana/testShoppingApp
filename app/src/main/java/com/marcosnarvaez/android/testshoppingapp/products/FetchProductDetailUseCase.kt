@@ -9,7 +9,7 @@ import javax.inject.Inject
 class FetchProductDetailUseCase @Inject constructor(private val storeApi: StoreApi) {
 
     sealed class Result {
-        data class Success(val description: String): Result()
+        data class Success(val product: Product): Result()
         object Failure: Result()
     }
 
@@ -18,7 +18,7 @@ class FetchProductDetailUseCase @Inject constructor(private val storeApi: StoreA
             try {
                 val response = storeApi.productsDetails(productId)
                 if (response.isSuccessful && response.body() != null) {
-                    return@withContext Result.Success(response.body()!!.description)
+                    return@withContext Result.Success(response.body()!!)
                 } else {
                     return@withContext Result.Failure
                 }

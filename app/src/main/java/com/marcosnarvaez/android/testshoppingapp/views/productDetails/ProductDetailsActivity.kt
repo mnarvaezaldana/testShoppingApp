@@ -49,7 +49,7 @@ class ProductDetailsActivity : BaseActivity() {
                 val result = fetchProductDetailUseCase.fetchProductsDetails(productId)
                 when (result) {
                     is FetchProductDetailUseCase.Result.Success -> {
-                        viewMvc.bindData(result.description)
+                        viewMvc.bindData(result.product)
                     }
                     is FetchProductDetailUseCase.Result.Failure -> {
                         onFetchFailed()
