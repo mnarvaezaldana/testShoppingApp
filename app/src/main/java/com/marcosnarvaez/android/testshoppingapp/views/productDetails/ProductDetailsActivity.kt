@@ -34,7 +34,7 @@ class ProductDetailsActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        fetchQuestionDetails(productId)
+        fetchProductDetails(productId)
     }
 
     override fun onStop() {
@@ -42,7 +42,7 @@ class ProductDetailsActivity : BaseActivity() {
         coroutineScope.coroutineContext.cancelChildren()
     }
 
-    private fun fetchQuestionDetails(productId: Int) {
+    private fun fetchProductDetails(productId: Int) {
         coroutineScope.launch {
             viewMvc.showProgressIndication()
             try {
