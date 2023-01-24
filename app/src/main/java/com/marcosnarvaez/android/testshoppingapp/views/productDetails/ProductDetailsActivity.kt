@@ -2,27 +2,24 @@ package com.marcosnarvaez.android.testshoppingapp.views.productDetails
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import com.marcosnarvaez.android.testshoppingapp.MyApplication
-import com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection.Service
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
 import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
 import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.ViewMvcFactory
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
 const val EXTRA_PRODUCT_ID = "productId"
 
 class ProductDetailsActivity : BaseActivity() {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    @field:Service private lateinit var fetchProductDetailUseCase: FetchProductDetailUseCase
-    @field:Service private lateinit var screensNavigator: ScreensNavigator
-    @field:Service private lateinit var dialogsNavigator: DialogsNavigator
-    @field:Service private lateinit var viewMvcFactory: ViewMvcFactory
+    @Inject lateinit var fetchProductDetailUseCase: FetchProductDetailUseCase
+    @Inject lateinit var screensNavigator: ScreensNavigator
+    @Inject lateinit var dialogsNavigator: DialogsNavigator
+    @Inject lateinit var viewMvcFactory: ViewMvcFactory
     private lateinit var viewMvc: ProductsDetailsViewMvc
     private var productId: Int = 0
 

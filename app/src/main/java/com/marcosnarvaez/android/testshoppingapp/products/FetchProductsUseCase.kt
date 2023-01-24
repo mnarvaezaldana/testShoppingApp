@@ -4,8 +4,9 @@ import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class FetchProductsUseCase(private val storeApi: StoreApi) {
+class FetchProductsUseCase @Inject constructor(private val storeApi: StoreApi) {
 
     sealed class Result {
         data class Success(val products: List<Product>): Result()

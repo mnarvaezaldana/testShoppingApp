@@ -1,19 +1,21 @@
 package com.marcosnarvaez.android.testshoppingapp.views.common
 
-import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection.activity.ActivityScope
 import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductDetailsActivity
 import com.marcosnarvaez.android.testshoppingapp.views.productsList.ProductListActivity
 
-class ScreensNavigator(private val context: Context) {
+@ActivityScope
+class ScreensNavigator (private val appCompatActivity: AppCompatActivity) {
 
     fun toProductDetails(productId: Int) {
-        ProductDetailsActivity.startProductDetailsActivity(context, productId)
+        ProductDetailsActivity.startProductDetailsActivity(appCompatActivity, productId)
     }
 
     fun toProductsList() {
-        val intent = Intent(context, ProductListActivity::class.java)
+        val intent = Intent(appCompatActivity.baseContext, ProductListActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(intent)
+        appCompatActivity.baseContext.startActivity(intent)
     }
 }

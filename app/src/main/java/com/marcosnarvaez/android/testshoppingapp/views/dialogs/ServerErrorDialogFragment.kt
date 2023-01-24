@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.marcosnarvaez.android.testshoppingapp.R
 
 class ServerErrorDialogFragment: DialogFragment() {
 

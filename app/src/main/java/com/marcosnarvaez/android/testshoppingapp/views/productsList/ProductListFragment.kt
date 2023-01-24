@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection.Service
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
@@ -12,6 +11,7 @@ import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.ViewMvcFa
 import com.marcosnarvaez.android.testshoppingapp.views.dialogs.DialogsNavigator
 import com.marcosnarvaez.android.testshoppingapp.views.fragments.BaseFragment
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
 class ProductListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
@@ -19,10 +19,10 @@ class ProductListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
     private var isDataLoaded = false
 
-    @field:Service private lateinit var fetchProductsUseCase: FetchProductsUseCase
-    @field:Service private lateinit var dialogsNavigator: DialogsNavigator
-    @field:Service private lateinit var screensNavigator: ScreensNavigator
-    @field:Service private lateinit var viewMvcFactory: ViewMvcFactory
+    @Inject lateinit var fetchProductsUseCase: FetchProductsUseCase
+    @Inject lateinit var dialogsNavigator: DialogsNavigator
+    @Inject lateinit var screensNavigator: ScreensNavigator
+    @Inject lateinit var viewMvcFactory: ViewMvcFactory
 
     private lateinit var viewMvc: ProductsListViewMvc
 
