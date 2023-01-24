@@ -3,6 +3,7 @@ package com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection.pre
 import com.marcosnarvaez.android.testshoppingapp.views.LogInActivity
 import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductDetailsActivity
 import com.marcosnarvaez.android.testshoppingapp.views.productsList.ProductListFragment
+import com.marcosnarvaez.android.testshoppingapp.views.productsList.ProductsCartListFragment
 import dagger.Subcomponent
 
 @PresentationScope
@@ -10,6 +11,7 @@ import dagger.Subcomponent
 interface PresentationComponent {
 
     fun inject(fragment: ProductListFragment)
+    fun inject(fragment: ProductsCartListFragment)
     fun inject(productDetailsActivity: ProductDetailsActivity)
     fun inject(logInActivity: LogInActivity)
 }

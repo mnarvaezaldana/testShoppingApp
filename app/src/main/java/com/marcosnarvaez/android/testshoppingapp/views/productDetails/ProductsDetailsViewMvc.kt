@@ -2,16 +2,24 @@ package com.marcosnarvaez.android.testshoppingapp.views.productDetails
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.marcosnarvaez.android.testshoppingapp.R
+import com.marcosnarvaez.android.testshoppingapp.database.ProductEntity
+import com.marcosnarvaez.android.testshoppingapp.database.ProductsDatabase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.BaseViewMvc
 import com.marcosnarvaez.android.testshoppingapp.views.imageloader.ImageLoader
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 class ProductsDetailsViewMvc(
     layoutInflater: LayoutInflater,
     private val imageLoader: ImageLoader,
+    private val database: ProductsDatabase,
     parent: ViewGroup?
 ): BaseViewMvc<ProductsDetailsViewMvc.Listener>(
     layoutInflater,
@@ -25,9 +33,10 @@ class ProductsDetailsViewMvc(
 
     private var productTitleTv: TextView
     private val productImageIV: ImageView
-    private var productDescriptionTV: TextView
+    private val productDescriptionTV: TextView
     private val productCategoryTV: TextView
-    private var productPriceTv: TextView
+    private val productPriceTv: TextView
+    private val addToCartBTN: Button
 
     init {
 
@@ -38,6 +47,7 @@ class ProductsDetailsViewMvc(
         productDescriptionTV = findViewById(R.id.descriptionTV)
         productCategoryTV = findViewById(R.id.categoryTV)
         productPriceTv = findViewById(R.id.priceTV)
+        addToCartBTN = findViewById(R.id.addToCartBTN)
         swipeRefresh = findViewById(R.id.productSR)
 
         swipeRefresh.isEnabled = false
@@ -49,5 +59,10 @@ class ProductsDetailsViewMvc(
         productCategoryTV.text = context.getString(R.string.category_template, product.category)
         productPriceTv.text = context.getString(R.string.price_template, product.price)
         imageLoader.loadImage(product.image, productImageIV)
+        addToCartBTN.setOnClickListener {
+            for (listener in listeners) {
+                listener.onProductClicked(product)
+            }
+        }
     }
 }

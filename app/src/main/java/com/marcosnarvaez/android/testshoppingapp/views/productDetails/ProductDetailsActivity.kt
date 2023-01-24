@@ -3,7 +3,9 @@ package com.marcosnarvaez.android.testshoppingapp.views.productDetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
+import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
 import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.ViewMvcFactory
@@ -13,7 +15,7 @@ import javax.inject.Inject
 
 const val EXTRA_PRODUCT_ID = "productId"
 
-class ProductDetailsActivity : BaseActivity() {
+class ProductDetailsActivity : BaseActivity(), ProductsDetailsViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     @Inject lateinit var fetchProductDetailUseCase: FetchProductDetailUseCase
@@ -35,11 +37,13 @@ class ProductDetailsActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         fetchProductDetails(productId)
+        viewMvc.registerListener(this)
     }
 
     override fun onStop() {
         super.onStop()
         coroutineScope.coroutineContext.cancelChildren()
+        viewMvc.unregisterListener(this)
     }
 
     private fun fetchProductDetails(productId: Int) {
@@ -71,6 +75,21 @@ class ProductDetailsActivity : BaseActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(EXTRA_PRODUCT_ID, productId)
             context.startActivity(intent)
+        }
+    }
+
+    override fun onRefreshClicked() {
+        Log.e("message", "not implemented yet")
+    }
+
+    override fun onProductClicked(productClicked: Product) {
+        coroutineScope.launch {
+            viewMvc.showProgressIndication()
+            try {
+                fetchProductDetailUseCase.addProductToCart(productClicked)
+            } finally {
+                viewMvc.hideProgressIndication()
+            }
         }
     }
 }

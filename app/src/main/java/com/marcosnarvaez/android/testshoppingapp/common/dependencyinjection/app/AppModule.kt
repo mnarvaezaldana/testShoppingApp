@@ -2,6 +2,9 @@ package com.marcosnarvaez.android.testshoppingapp.common.dependencyinjection.app
 
 import android.app.Application
 import androidx.annotation.UiThread
+import androidx.room.Database
+import androidx.room.Room
+import com.marcosnarvaez.android.testshoppingapp.database.ProductsDatabase
 import com.marcosnarvaez.android.testshoppingapp.networking.StoreApi
 import dagger.Module
 import dagger.Provides
@@ -31,6 +34,16 @@ class AppModule(val application: Application) {
             .baseUrl("https://fakestoreapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @AppScope
+    fun database(): ProductsDatabase {
+        return Room.databaseBuilder(
+            application.applicationContext,
+            ProductsDatabase::class.java,
+            "products_cart")
             .build()
     }
 
