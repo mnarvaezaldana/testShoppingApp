@@ -36,6 +36,7 @@ class LogInActivity : BaseActivity(), ProductsLoginViewMvc.Listener {
 
     override fun onLogIn() {
         fetchDataLogin.logIn(true)
+        viewMvc.clearInputs()
         moveToProductsListActivity()
     }
 

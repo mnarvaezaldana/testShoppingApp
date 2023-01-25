@@ -41,6 +41,11 @@ class ProductsLoginViewMvc(
         }
     }
 
+    fun clearInputs() {
+        usernameET.text.clear()
+        passwordET.text.clear()
+    }
+
     private fun listenerOnLogin() {
         for (listener in listeners) {
             listener.onLogIn()
