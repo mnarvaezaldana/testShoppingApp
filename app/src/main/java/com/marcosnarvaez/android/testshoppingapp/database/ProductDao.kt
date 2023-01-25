@@ -14,6 +14,6 @@ interface ProductDao {
     @Insert
     fun insert(productEntity: ProductEntity)
 
-    @Delete
-    fun delete(productEntity: ProductEntity)
+    @Query("DELETE FROM products_cart")
+    fun delete()
 }

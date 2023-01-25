@@ -1,4 +1,4 @@
-package com.marcosnarvaez.android.testshoppingapp.views
+package com.marcosnarvaez.android.testshoppingapp.views.productLogin
 
 import android.os.Bundle
 import com.marcosnarvaez.android.testshoppingapp.products.FetchDataLogin

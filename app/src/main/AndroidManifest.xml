@@ -30,7 +30,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".views.LogInActivity"
+            android:name=".views.productLogin.LogInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

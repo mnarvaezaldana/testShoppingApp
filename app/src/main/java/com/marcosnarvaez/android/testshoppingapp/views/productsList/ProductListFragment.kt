@@ -1,6 +1,7 @@
 package com.marcosnarvaez.android.testshoppingapp.views.productsList
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class ProductListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
+    private val TAG = ProductListFragment::class.java.name
     private var isDataLoaded = false
 
     @Inject lateinit var fetchProductsUseCase: FetchProductsUseCase
@@ -37,6 +38,7 @@ class ProductListFragment : BaseFragment(), ProductsListViewMvc.Listener {
         savedInstanceState: Bundle?
     ): View {
         viewMvc = viewMvcFactory.newProductsListViewMvc(container)
+        viewMvc.hideDeleteButton()
         return viewMvc.rootView
     }
 
@@ -84,6 +86,10 @@ class ProductListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
     override fun onProductClicked(productClicked: Product) {
         screensNavigator.toProductDetails(productClicked.id)
+    }
+
+    override fun onDelete() {
+        Log.e(TAG, "not Implemented yet $TAG")
     }
 
 }

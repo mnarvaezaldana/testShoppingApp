@@ -1,4 +1,4 @@
-package com.marcosnarvaez.android.testshoppingapp.views
+package com.marcosnarvaez.android.testshoppingapp.views.productLogin
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

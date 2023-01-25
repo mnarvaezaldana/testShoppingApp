@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.BaseViewMvc
@@ -25,16 +26,25 @@ class ProductsListViewMvc(
     interface Listener {
         fun onRefreshClicked()
         fun onProductClicked(productClicked: Product)
+        fun onDelete()
     }
 
     private var recyclerView: RecyclerView
     private var productsAdapter: ProductsAdapter
+    private var deleteItems: FloatingActionButton
 
     init {
         swipeRefresh = findViewById(R.id.productsSR)
         swipeRefresh.setOnRefreshListener {
             for (listener in listeners) {
                 listener.onRefreshClicked()
+            }
+        }
+
+        deleteItems = findViewById(R.id.deleteCartFAB)
+        deleteItems.setOnClickListener {
+            for (listener in listeners) {
+                listener.onDelete()
             }
         }
 
@@ -52,6 +62,10 @@ class ProductsListViewMvc(
 
     fun bindData(products: List<Product>) {
         productsAdapter.bindData(products)
+    }
+
+    fun hideDeleteButton() {
+        deleteItems.visibility = View.GONE
     }
 
     class ProductsAdapter(

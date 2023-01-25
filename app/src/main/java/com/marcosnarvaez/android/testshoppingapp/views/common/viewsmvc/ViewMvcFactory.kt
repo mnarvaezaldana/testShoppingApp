@@ -2,8 +2,7 @@ package com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.marcosnarvaez.android.testshoppingapp.database.ProductsDatabase
-import com.marcosnarvaez.android.testshoppingapp.views.ProductsLoginViewMvc
+import com.marcosnarvaez.android.testshoppingapp.views.productLogin.ProductsLoginViewMvc
 import com.marcosnarvaez.android.testshoppingapp.views.imageloader.ImageLoader
 import com.marcosnarvaez.android.testshoppingapp.views.productDetails.ProductsDetailsViewMvc
 import com.marcosnarvaez.android.testshoppingapp.views.productsList.ProductsListViewMvc

@@ -2,9 +2,8 @@ package com.marcosnarvaez.android.testshoppingapp.views.productsList
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductsUseCase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
@@ -17,7 +16,7 @@ import javax.inject.Inject
 class ProductsCartListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
+    private val TAG = ProductListFragment::class.java.name
     private var isDataLoaded = false
 
     @Inject lateinit var fetchProductsUseCase: FetchProductsUseCase
@@ -29,8 +28,8 @@ class ProductsCartListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injector.inject(this)
-        Log.e("message", "cart created")
         super.onCreate(savedInstanceState)
+        (activity as ProductListActivity).hideToolbar()
     }
 
     override fun onCreateView(
@@ -67,7 +66,7 @@ class ProductsCartListFragment : BaseFragment(), ProductsListViewMvc.Listener {
                         isDataLoaded = true
                     }
                     is FetchProductsUseCase.Result.Failure -> {
-                        onFetchFailed()
+                        Log.e(TAG, "Not implemented yet $TAG")
                     }
                 }
             } finally {
@@ -76,8 +75,18 @@ class ProductsCartListFragment : BaseFragment(), ProductsListViewMvc.Listener {
         }
     }
 
+    private fun deleteCartProducts() {
+        coroutineScope.launch {
+            fetchProductsUseCase.deleteCart()
+        }
+        (activity as ProductListActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, ProductListFragment())
+            .commit()
+        (activity as ProductListActivity).showToolbar()
+    }
+
     private fun onFetchFailed() {
-        dialogsNavigator.showServerErrorDialog()
+        dialogsNavigator.showServerErrorDialog() //or empty screen
     }
 
     override fun onRefreshClicked() {
@@ -86,6 +95,10 @@ class ProductsCartListFragment : BaseFragment(), ProductsListViewMvc.Listener {
 
     override fun onProductClicked(productClicked: Product) {
         screensNavigator.toProductDetails(productClicked.id)
+    }
+
+    override fun onDelete() {
+        deleteCartProducts()
     }
 
 }

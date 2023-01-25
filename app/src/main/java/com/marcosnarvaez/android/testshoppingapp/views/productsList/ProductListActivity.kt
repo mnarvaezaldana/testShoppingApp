@@ -6,8 +6,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.marcosnarvaez.android.testshoppingapp.R
-import com.marcosnarvaez.android.testshoppingapp.products.FetchDataLogin
 import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
+
 
 class ProductListActivity : BaseActivity() {
 
@@ -53,5 +53,13 @@ class ProductListActivity : BaseActivity() {
         } catch (t: Throwable) {
             throw t
         }
+    }
+
+    fun hideToolbar() {
+        supportActionBar!!.hide()
+    }
+
+    fun showToolbar() {
+        supportActionBar!!.show()
     }
 }

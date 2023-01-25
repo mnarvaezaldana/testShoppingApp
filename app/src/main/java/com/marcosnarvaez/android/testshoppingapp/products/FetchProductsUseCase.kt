@@ -57,4 +57,11 @@ class FetchProductsUseCase @Inject constructor(private val database: ProductsDat
         }
     }
 
+    suspend fun deleteCart() {
+        withContext(Dispatchers.IO) {
+            val productDao = database.productDao()
+            productDao.delete()
+        }
+    }
+
 }
