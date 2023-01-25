@@ -1,6 +1,7 @@
 package com.marcosnarvaez.android.testshoppingapp.views.productLogin
 
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.marcosnarvaez.android.testshoppingapp.products.FetchDataLogin
 import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
 import com.marcosnarvaez.android.testshoppingapp.views.common.ScreensNavigator
@@ -15,6 +16,7 @@ class LogInActivity : BaseActivity(), ProductsLoginViewMvc.Listener {
     private lateinit var viewMvc: ProductsLoginViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         injector.inject(this)
         super.onCreate(savedInstanceState)
         viewMvc = viewMvcFactory.newProductLoginViewMvc(null)
