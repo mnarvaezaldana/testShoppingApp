@@ -42,5 +42,6 @@ class LogInActivity : BaseActivity(), ProductsLoginViewMvc.Listener {
 
     private fun moveToProductsListActivity() {
         screensNavigator.toProductsList()
+        finish()
     }
 }
