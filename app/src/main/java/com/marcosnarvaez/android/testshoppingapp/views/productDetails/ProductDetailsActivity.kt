@@ -1,7 +1,5 @@
 package com.marcosnarvaez.android.testshoppingapp.views.productDetails
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.marcosnarvaez.android.testshoppingapp.products.FetchProductDetailUseCase
@@ -67,15 +65,6 @@ class ProductDetailsActivity : BaseActivity(), ProductsDetailsViewMvc.Listener {
 
     private fun onFetchFailed() {
         dialogsNavigator.showServerErrorDialog()
-    }
-
-    companion object {
-        fun startProductDetailsActivity(context: Context, productId: Int) {
-            val intent = Intent(context, ProductDetailsActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra(EXTRA_PRODUCT_ID, productId)
-            context.startActivity(intent)
-        }
     }
 
     override fun onRefreshClicked() {

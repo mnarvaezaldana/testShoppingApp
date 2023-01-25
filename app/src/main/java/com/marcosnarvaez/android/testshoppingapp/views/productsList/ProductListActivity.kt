@@ -1,10 +1,12 @@
 package com.marcosnarvaez.android.testshoppingapp.views.productsList
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.marcosnarvaez.android.testshoppingapp.R
+import com.marcosnarvaez.android.testshoppingapp.products.FetchDataLogin
 import com.marcosnarvaez.android.testshoppingapp.views.activities.BaseActivity
 
 class ProductListActivity : BaseActivity() {
@@ -34,10 +36,22 @@ class ProductListActivity : BaseActivity() {
                 true
             }
             R.id.logOut -> {
+                logOut()
                 finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun logOut() {
+        try {
+            val sharedPreferences = getSharedPreferences("data", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("isLogged", false)
+            editor.apply()
+        } catch (t: Throwable) {
+            throw t
         }
     }
 }

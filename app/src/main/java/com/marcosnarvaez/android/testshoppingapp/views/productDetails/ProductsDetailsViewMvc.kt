@@ -6,20 +6,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.marcosnarvaez.android.testshoppingapp.R
-import com.marcosnarvaez.android.testshoppingapp.database.ProductEntity
-import com.marcosnarvaez.android.testshoppingapp.database.ProductsDatabase
 import com.marcosnarvaez.android.testshoppingapp.products.Product
 import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.BaseViewMvc
 import com.marcosnarvaez.android.testshoppingapp.views.imageloader.ImageLoader
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 class ProductsDetailsViewMvc(
     layoutInflater: LayoutInflater,
     private val imageLoader: ImageLoader,
-    private val database: ProductsDatabase,
     parent: ViewGroup?
 ): BaseViewMvc<ProductsDetailsViewMvc.Listener>(
     layoutInflater,
