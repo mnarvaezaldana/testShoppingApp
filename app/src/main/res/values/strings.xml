@@ -8,4 +8,5 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="user">User</string>
     <string name="password">Password</string>
+    <string name="logIn_rules">Username and password must contain 5 characters each, at least </string>
 </resources>

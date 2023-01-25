@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.core.widget.addTextChangedListener
 import com.marcosnarvaez.android.testshoppingapp.R
 import com.marcosnarvaez.android.testshoppingapp.views.common.viewsmvc.BaseViewMvc
 
@@ -30,12 +31,24 @@ class ProductsLoginViewMvc(
         passwordET = findViewById(R.id.PasswordET)
 
         loginBtn.setOnClickListener {
-            for (listener in listeners) {
-                listener.onLogIn()
-            }
+            listenerOnLogin()
+        }
+        usernameET.addTextChangedListener {
+            setButtonEnable()
+        }
+        passwordET.addTextChangedListener {
+            setButtonEnable()
         }
     }
 
+    private fun listenerOnLogin() {
+        for (listener in listeners) {
+            listener.onLogIn()
+        }
+    }
 
+    private fun setButtonEnable() {
+        loginBtn.isEnabled = (usernameET.text.length >= 5 && passwordET.text.length >= 5)
+    }
 
 }
